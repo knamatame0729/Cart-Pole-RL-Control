@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<robot name="cart_pole">
+    <!-- World Link (dummy root) -->
+    <link name="world"/>
+
+    <material name="blue">
+        <color rgba="0 0 0.8 1"/>
+    </material>
+    <material name="red">
+        <color rgba="0.8 0 0 1"/>
+    </material>
+    <material name="green">
+        <color rgba="0 1 0 1"/>
+    </material>
+
+    <!-- Base Top Link -->
+    <link name="base_top">
+        <visual>
+            <geometry>
+                <box size="5.0 0.2 0.2"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="5.0 0.2 0.2"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- Base Left Wall Link -->
+    <link name="base_left_wall">
+        <visual>
+            <geometry>
+                <box size="0.2 0.2 0.9"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.2 0.2 0.9"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- Base Right Link -->
+    <link name="base_right_wall">
+        <visual>
+            <geometry>
+                <box size="0.2 0.2 0.9"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.2 0.2 0.9"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- World to Base Top Joint -->
+    <joint name="world_to_base" type="fixed">
+        <origin xyz="0 0 0.99"/>
+        <parent link="world"/>
+        <child link="base_top"/>
+    </joint>
+
+    <!-- Base Top to Left Joint -->
+    <joint name="base_to_left_wall" type="fixed">
+        <origin xyz="-2.4 0 -0.45"/>
+        <parent link="base_top"/>
+        <child link="base_left_wall"/>
+    </joint>
+
+    <!-- Base Top to Right Joint -->
+    <joint name="base_to_right_wall" type="fixed">
+        <origin xyz="2.4 0 -0.45"/>
+        <parent link="base_top"/>
+        <child link="base_right_wall"/>
+    </joint>
+
+    <!-- Cart Link -->
+    <link name="cart">
+        <visual>
+            <geometry>
+                <box size="0.3 0.2 0.1"/>
+            </geometry>
+            <material name="red"/>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.3 0.2 0.1"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="1.0"/>
+            <inertia ixx="0.1" ixy="0" ixz="0" iyy="0.1" iyz="0" izz="0.1"/>
+        </inertial>
+    </link>
+
+    <!-- Pole Link -->
+    <link name="pole">
+        <visual>
+            <origin xyz="0 -0.125 -0.5"/>
+            <geometry>
+                <cylinder radius="0.02" length="1.0"/>
+            </geometry>
+            <material name="green"/>
+        </visual>
+        <collision>
+            <origin xyz="0 -0.125 -0.5"/>
+            <geometry>
+                <cylinder radius="0.02" length="1.0"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <origin xyz="0 -0.125 -0.5"/>
+            <mass value="1.0"/>
+            <inertia ixx="0.083" ixy="0" ixz="0" iyy="0.083" iyz="0" izz="0.0012"/>
+        </inertial>
+    </link>
+
+    <!-- Cart Joint -->
+    <joint name="cart_to_base" type="prismatic">
+        <parent link="base_top"/>
+        <child link="cart"/>
+        <origin xyz="0 0 0.16"/> 
+        <axis xyz="1 0 0"/>
+        <limit lower="-2.5" upper="2.5" effort="1000.0" velocity="1000.0"/>
+        <dynamics damping="5.0" friction="0.0"/>
+    </joint>
+
+    <!-- Pole Joint -->
+    <joint name="pole_joint" type="revolute">
+        <parent link="cart"/>
+        <child link="pole"/>
+        <origin xyz="0 0 0"/>
+        <axis xyz="0 1 0"/>
+        <limit lower="-12.566" upper="12.566" effort="1000.0" velocity="1000.0"/>
+        <dynamics damping="0.1" friction="0.0"/>
+    </joint>
+</robot>
