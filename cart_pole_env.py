@@ -3,7 +3,7 @@ import math
 import genesis as gs
 
 def gs_rand_float(lower, upper, shape, device):
-    """Generate random floats in the range [lower, upper) with the given shape on the specified device."""
+    """Generate random floats in the range (lower, upper) with the given shape on the specified device."""
     return (upper - lower) * torch.rand(size=shape, device=device) + lower
 
 class CartPoleEnv:
@@ -14,7 +14,8 @@ class CartPoleEnv:
         self.device = gs.device
 
         self.simulate_action_latency = env_cfg.get("simulate_action_latency", False)
-        self.dt = 0.02
+
+        self.dt = 0.02 # time step
         self.max_episode_length = math.ceil(env_cfg["episode_length_s"] / self.dt)
 
         self.env_cfg = env_cfg
@@ -24,14 +25,14 @@ class CartPoleEnv:
         self.obs_scales = obs_cfg["obs_scales"]
         self.reward_scales = reward_cfg["reward_scales"]
 
-        self.eval_mode = eval_mode
+        self.eval_mode = eval_mode # Eval mode flag: switch train mode and eval mode
 
         # Create simulation scene
         self.scene = gs.Scene(
             sim_options=gs.options.SimOptions(dt=self.dt, substeps=10),
             viewer_options=gs.options.ViewerOptions(
                 max_FPS=30,
-                camera_pos=(2.0, 2.0, 2.5),
+                camera_pos=(2.0, -2.0, 2.5),
                 camera_lookat=(0.0, 0.0, 0.5),
                 camera_fov=40,
             ),
@@ -49,7 +50,7 @@ class CartPoleEnv:
         self.scene.add_entity(gs.morphs.URDF(file="urdf/plane/plane.urdf", fixed=True))
 
         # Add CartPole robot
-        self.base_init_pos = torch.tensor(env_cfg["base_init_pos"], device=gs.device)
+        self.base_init_pos = torch.tensor(env_cfg["base_init_pos"], device=gs.device) # Initial Position
         self.robot = self.scene.add_entity(
             gs.morphs.URDF(
                 file="cart_pole_v2.urdf",
@@ -61,7 +62,7 @@ class CartPoleEnv:
         self.scene.build(n_envs=num_envs)
 
         # Define joint indices
-        self.cart_joint_idx = [self.robot.get_joint("cart_to_base").dof_start]
+        self.cart_joint_idx = [self.robot.get_joint("cart_to_base").dof_start] 
         self.pole_joint_idx = [self.robot.get_joint("pole_joint").dof_start]
 
         # Prepare reward functions and scale by dt
@@ -94,17 +95,18 @@ class CartPoleEnv:
         Return: obsercations, rewards, resets, extras 
         """
 
-        self.actions = torch.clip(actions, -self.env_cfg["clip_actions"], self.env_cfg["clip_actions"])
+        self.actions = torch.clip(actions, -self.env_cfg["clip_actions"], self.env_cfg["clip_actions"])  # Clipping actions to limit excessive actions
         exec_actions = self.last_actions if self.simulate_action_latency else self.actions
 
-        total_force = exec_actions * self.env_cfg["action_scale"]
-        self.robot.control_dofs_force(total_force, self.cart_joint_idx)
-        self.scene.step()
+        total_force = exec_actions * self.env_cfg["action_scale"]        # Actions → Scale
+        self.robot.control_dofs_force(total_force, self.cart_joint_idx)  # Apply force to cart
+        self.scene.step()                                                # +0.02 time step
 
         # Update buffers
-        self.episode_length_buf += 1
-        self.base_pos[:] = self.robot.get_pos()
+        self.episode_length_buf += 1            # +1 episode step
+        self.base_pos[:] = self.robot.get_pos() # Update base link position
 
+        # Update buffers of joint states
         self.cart_pos[:] = self.robot.get_dofs_position(self.cart_joint_idx)
         self.cart_vel[:] = self.robot.get_dofs_velocity(self.cart_joint_idx)
         self.pole_angle[:] = self.robot.get_dofs_position(self.pole_joint_idx)
@@ -118,6 +120,7 @@ class CartPoleEnv:
         self.extras["time_outs"] = torch.zeros_like(self.reset_buf, device=gs.device, dtype=gs.tc_float)
         self.extras["time_outs"][time_out_idx] = 1.0
 
+        # Reset 
         self.reset_idx(self.reset_buf.nonzero(as_tuple=False).flatten())
 
         # Compute rewards
@@ -137,7 +140,8 @@ class CartPoleEnv:
             ],
             axis=-1,
         )
-
+        
+        # Hold current actions (when self.simulate_action_latency=True)
         self.last_actions[:] = self.actions[:]
 
         self.extras["observations"]["critic"] = self.obs_buf
@@ -158,12 +162,15 @@ class CartPoleEnv:
         self.cart_pos[envs_idx] = torch.zeros((len(envs_idx), 1), device=gs.device, dtype=gs.tc_float)
         self.cart_vel[envs_idx] = 0.0
 
+        # Eval mode → Reset joint angle from downward position
         if self.eval_mode:
             self.pole_angle[envs_idx] = torch.zeros((len(envs_idx), 1), device=gs.device, dtype=gs.tc_float)
+        # Train mode → Reset joint angle between -pi and pi
         else:
             self.pole_angle[envs_idx] = gs_rand_float(-3.14159, 3.14159, (len(envs_idx), 1), device=gs.device)
         
         self.pole_vel[envs_idx] = 0.0
+
         self.robot.set_dofs_position(
             position=self.cart_pos[envs_idx],
             dofs_idx_local=self.cart_joint_idx,
@@ -203,16 +210,30 @@ class CartPoleEnv:
 
     # ------------ Reward Functions ------------
     def _reward_upright(self):
-        """Reward for swinging the pole upstraiht."""
+        """
+        Reward for swinging the pole upstraiht
+
+        cos(pi) = -1, cos(0) = 1
+
+        > 1 - cos(pi) = 2
+        > 1 - cos(0) = 0
+
+        """
         return (1.0 - torch.cos(self.pole_angle[:, 0])) / 1.0
 
     def _reward_upright_stable(self):
-        """Reward for keeping the pole upright"""
+        """
+        Reward for keeping the pole upright
+        if the pole angle is between pi ± angle_threshold, +1 reward
+
+        """
         upright_condition = torch.abs(self.pole_angle[:, 0] - 3.14159) < self.reward_cfg["angle_threshold"]
         return upright_condition.float() * 1.0
 
     def _reward_action_rate(self):
-        """Penalty for large changes in actions (negative reward)."""
+        """Penalty for large changes in actions (negative reward)
+        
+        """
         return -torch.sum(torch.square(self.last_actions - self.actions), dim=1)
 
     def _reward_cart_pos(self):
