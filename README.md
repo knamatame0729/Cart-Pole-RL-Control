@@ -1,6 +1,6 @@
 # Cart Pole Swing-Up Reinforcement Learning
 **Originally I used ```conda``` to manage the virtual environment with python3.11. However, conda was found to have compatibility issues with ROS2. I switched to using ```venv``` to create a Python 3.10 environment.  
-See [the ros2_cartpole branch]() for the setup**
+See [the ros2_cartpole branch](https://github.com/knamatame0729/Cart-Pole-RL-Control/tree/ros2_cartpole) for the setup**
 ## Overview
 This repository enable to implement a **CartPole environment** for training reinforcement learning (RL) agents to solve the classic control problem of balancing a pole on a cart while keeping the cart near the origin. The environment trains agents to **swing the pole up from a downward position to an upright position** and maintain the cart at the center
 
