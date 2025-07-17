@@ -45,10 +45,10 @@ cd
 git clone https://github.com/leggedrobotics/rsl_rl
 cd rsl_rl && git checkout v1.0.2 && pip install -e .
 ```
-Clone this repository
+Clone this repository (ros2_cartpole branch)
 ```bash
 cd
-git clone https://github.com/knamatame0729/Cart-Pole-RL-Control.git cart_pole_rl_control
+git clone -b ros2_cartpole https://github.com/knamatame0729/Cart-Pole-RL-Control.git cart_pole_rl_control
 pip install tensorboard
 ```
 
