@@ -1,4 +1,6 @@
 # Cart Pole Swing-Up Reinforcement Learning
+## ROS2 Support Branch
+**This branch includes ROS2 (Humble) integration**
 
 ## Overview
 This repository enable to implement a **CartPole environment** for training reinforcement learning (RL) agents to solve the classic control problem of balancing a pole on a cart while keeping the cart near the origin. The environment trains agents to **swing the pole up from a downward position to an upright position** and maintain the cart at the center
@@ -9,6 +11,8 @@ This repository enable to implement a **CartPole environment** for training rein
 - CUDA 11.8
 - RAM 32GB
 - Ubuntu 22.04
+- ROS2 humble
+- Python 3.10
 
 ## Demo Video
 ![Demo](media/cart_pole_rl.gif)  
@@ -16,12 +20,12 @@ This repository enable to implement a **CartPole environment** for training rein
 ## Installation and Usage
 
 ```bash
-conda create -n cart-pole-rl python3.11
-conda activate cart-pole-rl
+python3.10 -m venv cart-pole-rl
+source cart-pole-rl/bin/activate
 ```
 Install pytorch with matching CUDA version (CUDA 11.8 is utilized in this repo)
 ```bash
-conda install pytorch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1  pytorch-cuda=11.8 -c pytorch -c nvidia
+pip install torch==2.5.1+cu118 torchvision==0.20.1+cu118 torchaudio==2.5.1 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 Install Genesis
 ```bash
