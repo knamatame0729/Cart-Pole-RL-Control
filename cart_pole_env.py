@@ -14,7 +14,7 @@ class CartPoleEnv:
         self.device = gs.device
 
         self.simulate_action_latency = env_cfg.get("simulate_action_latency", False)
-        self.dt = 0.01
+        self.dt = 0.02
         self.max_episode_length = math.ceil(env_cfg["episode_length_s"] / self.dt)
 
         self.env_cfg = env_cfg
@@ -204,7 +204,7 @@ class CartPoleEnv:
     # ------------ Reward Functions ------------
     def _reward_upright(self):
         """Reward for swinging the pole upstraiht."""
-        return (1.0 - torch.cos(self.pole_angle[:, 0])) / 2.0
+        return (1.0 - torch.cos(self.pole_angle[:, 0])) / 1.0
 
     def _reward_upright_stable(self):
         """Reward for keeping the pole upright"""
