@@ -32,8 +32,9 @@ class CartPoleStatePublisher(Node):
         self.cart_vel_pub = self.create_publisher(Float32, 'cart_vel', 10)
         self.pole_angle_pub = self.create_publisher(Float32, 'pole_angle', 10)
         self.pole_vel_pub = self.create_publisher(Float32, 'pole_vel', 10)
+        self.action_pub = self.create_publisher(Float32, 'action', 10)
 
-    def publish_state(self, cart_pos, cart_vel, pole_angle, pole_vel):
+    def publish_state(self, cart_pos, cart_vel, pole_angle, pole_vel, action):
         """ Publish each state """
         cart_pos_msg = Float32()
         cart_pos_msg.data = float(cart_pos.item())
@@ -50,6 +51,10 @@ class CartPoleStatePublisher(Node):
         pole_vel_msg = Float32()
         pole_vel_msg.data = float(pole_vel.item())
         self.pole_vel_pub.publish(pole_vel_msg)
+        
+        action_msg = Float32()
+        action_msg.data = float(action.item())
+        self.action_pub.publish(action_msg)
 
 def main():
     parser = argparse.ArgumentParser()
@@ -87,7 +92,7 @@ def main():
             obs, rews, dones, infos = env.step(actions)
 
             # Publish
-            state_publisher.publish_state(env.cart_pos[0], env.cart_vel[0], env.pole_angle[0], env.pole_vel[0])
+            state_publisher.publish_state(env.cart_pos[0], env.cart_vel[0], env.pole_angle[0], env.pole_vel[0], actions[0])
 
             if dones.any():
                 obs, _ = env.reset()
