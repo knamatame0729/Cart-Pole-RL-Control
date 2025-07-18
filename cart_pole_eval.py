@@ -34,11 +34,11 @@ class CartPoleStatePublisher(Node):
         self.pole_vel_pub = self.create_publisher(Float32, 'pole_vel', 10)
         self.action_pub = self.create_publisher(Float32, 'action', 10)
 
-    def publish_state(self, cart_pos, cart_vel, pole_angle, pole_vel, action):
+    def publish_state(self, cart_pos, cart_vel, pole_angle, pole_vel, action, action_scale):
         """ Publish each state """
         cart_pos_msg = Float32()
         cart_pos_msg.data = float(cart_pos.item())
-        self.cart_vel_pub.publish(cart_pos_msg)
+        self.cart_pos_pub.publish(cart_pos_msg)
 
         cart_vel_msg = Float32()
         cart_vel_msg.data = float(cart_vel.item())
@@ -53,9 +53,14 @@ class CartPoleStatePublisher(Node):
         self.pole_vel_pub.publish(pole_vel_msg)
         
         action_msg = Float32()
-        action_msg.data = float(action.item())
+        action_msg.data = float((action*action_scale).item())
         self.action_pub.publish(action_msg)
 
+        self.get_logger().info(
+                f"State: cart_pos={cart_pos_msg.data:.3f} m, cart_vel={cart_vel_msg.data:.3f} m/s, "
+                f"pole_angle={pole_angle_msg.data:.3f} rad, pole_vel={pole_vel_msg.data:.3f} rad/s, "
+                f"action={action_msg.data:.3f} N"
+            )
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-e", "--exp_name", type=str, default="cartpole-training")
@@ -92,7 +97,7 @@ def main():
             obs, rews, dones, infos = env.step(actions)
 
             # Publish
-            state_publisher.publish_state(env.cart_pos[0], env.cart_vel[0], env.pole_angle[0], env.pole_vel[0], actions[0])
+            state_publisher.publish_state(env.cart_pos[0], env.cart_vel[0], env.pole_angle[0], env.pole_vel[0], actions[0], env.env_cfg["action_scale"])
 
             if dones.any():
                 obs, _ = env.reset()

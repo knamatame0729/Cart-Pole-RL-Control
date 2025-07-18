@@ -5,6 +5,13 @@
 ## Overview
 This repository enable to implement a **CartPole environment** for training reinforcement learning (RL) agents to solve the classic control problem of balancing a pole on a cart while keeping the cart near the origin. The environment trains agents to **swing the pole up from a downward position to an upright position** and maintain the cart at the center
 
+## Objectives
+
+1. Maintain the pendulum in an upright position (π rad) from downward position (0 rad)
+2. Keep the cart within ± 2.5m physical limits
+3. Keep the cart at origin
+3. Achieve stabele operation
+
 ## Testing Environment
 - AMD Ryzen 7 5700X
 - RTX 3060 Ti
@@ -66,6 +73,23 @@ After complete training, run this to watch the training result
 ```bash
 python3 cart_pole_eval.py
 ```
+
+## Reward
+
+## Evaluation Metrics
+#### Cart Position (m)
+![](media/cart_)
+#### Cart Velocity (m/s)
+![](media/cart_vel.png)  
+
+#### Pole Angle (rad)
+![](media/pole_angle.png)  
+
+#### Pole Velocity (rad/s)
+![](media/pole_vel.png)  
+
+#### Control Force (N)
+![](media/actions.png)  
 
 ## References
 - Nikita Rudin, David Hoeller, Philipp Reist, and Marco Hutter.  
