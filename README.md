@@ -74,7 +74,35 @@ After complete training, run this to watch the training result
 python3 cart_pole_eval.py
 ```
 
-## Reward
+## Reward Functions
+
+1. **Reward for Pole Upright**  
+Encourage the pole to swing from the downward position to the upright position (Swing-Up)
+- At $\theta(t) = \pi$ (upright), $\cos(\pi) = -1$, ${\text{→}}$ $r_{\text{upright}} = 1 - (-1) = 2.0$
+- At $\theta(t) = 0$ (upright), $\cos(0) = 1$, ${\text{→}}$ $r_{\text{upright}} = 1 - 1 = 0.0$
+
+$$r_{\text{upright}}(t) = 1 - \cos(\theta(t))$$
+  
+
+
+2. **Reward for Upright Stability**  
+To remain stable near the upright position
+
+$$r_{\text{upright\_stable}}(t) = \begin{cases} 
+1.0 & \text{if } |\theta(t) - \pi| < \theta_{\text{threshold}}(0.3 & rad), \\
+0.0 & \text{otherwise},
+\end{cases}$$
+
+3. **Penalty for Action Rate**  
+To ensure smooth and stable control, reducing the oscillations in the pole and cart during the swing-up phase  
+
+$$r_{\text{action\_rate}}(t) = -\sum_{i=1}^{n_{\text{actions}}} \left( a_i(t) - a_i(t-1) \right)^2$$
+
+4. **Penalty for Cart Position Deviation**  
+Add a penalty for the cart moving away from x = 0 to keep the cart centered
+
+$$r_{\text{cart\_pos}}(t) = -x(t)^2$$
+
 
 ## Evaluation Metrics
 #### Cart Position (m)
