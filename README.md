@@ -78,30 +78,43 @@ python3 cart_pole_eval.py
 
 1. **Reward for Pole Upright**  
 Encourage the pole to swing from the downward position to the upright position (Swing-Up)
-- At $\theta(t) = \pi$ (upright), $\cos(\pi) = -1$, ${\text{→}}$ $r_{\text{upright}} = 1 - (-1) = 2.0$
-- At $\theta(t) = 0$ (upright), $\cos(0) = 1$, ${\text{→}}$ $r_{\text{upright}} = 1 - 1 = 0.0$
 
-$$r_{\text{upright}}(t) = 1 - \cos(\theta(t))$$
+<div align="center">
+
+![alt text](media/Screenshot%20from%202025-07-18%2021-46-52.png)  
+
+![alt text](media/Screenshot%20from%202025-07-18%2021-47-16.png)  
+
+</div>
   
 
 
 2. **Reward for Upright Stability**  
 To remain stable near the upright position
 
-$$r_{\text{uprightstable}}(t) = \begin{cases} 
-1.0 & \text{if } |\theta(t) - \pi| < \theta_{\text{threshold}} \, (0.3 \, \text{rad}), \\
-0.0 & \text{otherwise},
-\end{cases}$$
+<div align="center">
+
+![alt text](media/Screenshot%20from%202025-07-18%2021-47-37.png)
+
+</div>
 
 3. **Penalty for Action Rate**  
 To ensure smooth and stable control, reducing the oscillations in the pole and cart during the swing-up phase  
 
-$$r_{\text{action}}(t) = -\sum_{i=1}^{n_{\text{actions}}} \left( a_i(t) - a_i(t-1) \right)^2$$
+<div align="center">
+
+![alt text](media/Screenshot%20from%202025-07-18%2021-48-02.png)
+
+</div>
 
 4. **Penalty for Cart Position Deviation**  
 Add a penalty for the cart moving away from x = 0 to keep the cart centered
 
-$$r_{\text{cartpos}}(t) = -x(t)^2$$
+<div align="center">
+
+![alt text](media/Screenshot%20from%202025-07-18%2021-48-24.png)
+
+</div>
 
 
 ## Evaluation Metrics
