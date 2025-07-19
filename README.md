@@ -88,20 +88,20 @@ $$r_{\text{upright}}(t) = 1 - \cos(\theta(t))$$
 2. **Reward for Upright Stability**  
 To remain stable near the upright position
 
-$$r_{\text{upright\_stable}}(t) = \begin{cases} 
-1.0 & \text{if } |\theta(t) - \pi| < \theta_{\text{threshold}}(0.3 & rad), \\
+$$r_{\text{uprightstable}}(t) = \begin{cases} 
+1.0 & \text{if } |\theta(t) - \pi| < \theta_{\text{threshold}} \, (0.3 \, \text{rad}), \\
 0.0 & \text{otherwise},
 \end{cases}$$
 
 3. **Penalty for Action Rate**  
 To ensure smooth and stable control, reducing the oscillations in the pole and cart during the swing-up phase  
 
-$$r_{\text{action\_rate}}(t) = -\sum_{i=1}^{n_{\text{actions}}} \left( a_i(t) - a_i(t-1) \right)^2$$
+$$r_{\text{action}}(t) = -\sum_{i=1}^{n_{\text{actions}}} \left( a_i(t) - a_i(t-1) \right)^2$$
 
 4. **Penalty for Cart Position Deviation**  
 Add a penalty for the cart moving away from x = 0 to keep the cart centered
 
-$$r_{\text{cart\_pos}}(t) = -x(t)^2$$
+$$r_{\text{cartpos}}(t) = -x(t)^2$$
 
 
 ## Evaluation Metrics
