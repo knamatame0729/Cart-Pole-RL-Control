@@ -63,6 +63,63 @@ After complete training, run this to watch the training result
 ```bash
 python3 cart_pole_eval.py
 ```
+## Reward Functions
+
+1. **Reward for Pole Upright**  
+Encourage the pole to swing from the downward position to the upright position (Swing-Up)
+
+<div align="center">
+
+![alt text](media/Screenshot%20from%202025-07-18%2021-46-52.png)  
+
+![alt text](media/Screenshot%20from%202025-07-18%2021-47-16.png)  
+
+</div>
+  
+
+
+2. **Reward for Upright Stability**  
+To remain stable near the upright position
+
+<div align="center">
+
+![alt text](media/Screenshot%20from%202025-07-18%2021-47-37.png)
+
+</div>
+
+3. **Penalty for Action Rate**  
+To ensure smooth and stable control, reducing the oscillations in the pole and cart during the swing-up phase  
+
+<div align="center">
+
+![alt text](media/Screenshot%20from%202025-07-18%2021-48-02.png)
+
+</div>
+
+4. **Penalty for Cart Position Deviation**  
+Add a penalty for the cart moving away from x = 0 to keep the cart centered
+
+<div align="center">
+
+![alt text](media/Screenshot%20from%202025-07-18%2021-48-24.png)
+
+</div>
+
+
+## Evaluation Metrics
+#### Cart Position (m)
+![](media/cart_)
+#### Cart Velocity (m/s)
+![](media/cart_vel.png)  
+
+#### Pole Angle (rad)
+![](media/pole_angle.png)  
+
+#### Pole Velocity (rad/s)
+![](media/pole_vel.png)  
+
+#### Control Force (N)
+![](media/actions.png)  
 
 ## References
 - Nikita Rudin, David Hoeller, Philipp Reist, and Marco Hutter.  
