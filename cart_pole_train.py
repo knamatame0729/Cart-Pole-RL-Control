@@ -27,7 +27,7 @@ def get_train_cfg(exp_name, max_iterations):
             "entropy_coef": 0.02,
             "gamma": 0.99,
             "lam": 0.95,
-            "learning_rate": 0.001,
+            "learning_rate": 0.0005,
             "max_grad_norm": 1.0,
             "num_learning_epochs": 10,
             "num_mini_batches": 8,
@@ -66,10 +66,10 @@ def get_cfgs():
     env_cfg = {
         "num_actions": 1,
         "episode_length_s": 20.0,
-        "action_scale": 25.0,
+        "action_scale": 40.0,
         "simulate_action_latency": False,
         "clip_actions": 1.0,
-        "base_init_pos": [0.0, 0.0, 0.05],  # Initial cart position
+        "base_init_pos": [0.0, 0.0, 0.0],  # Initial cart position
     }
     obs_cfg = {
         "num_obs": 4,  # Cart position, cart velocity, pole angle, pole angular velocity
@@ -81,12 +81,12 @@ def get_cfgs():
         },
     }
     reward_cfg = {
-        "angle_threshold": 0.3,
+        "angle_threshold": 0.2,
         "reward_scales": {
-            "upright": 50.0,  # Reward for swinging pole upright
-            "upright_stable": 30.0, # Reward for keeping upright
+            "upright": 60.0,  # Reward for swinging pole upright
+            "upright_stable": 40.0, # Reward for keeping upright
             "action_rate": -0.001,  # Penalty for rapid action changes
-            "cart_pos": -3.0,  # Penalty for cart deviation from origin
+            "cart_pos": -2.0,  # Penalty for cart deviation from origin
         },
     }
     return env_cfg, obs_cfg, reward_cfg
