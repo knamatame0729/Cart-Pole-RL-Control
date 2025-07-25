@@ -3,7 +3,11 @@
 **This branch includes ROS2 (Humble) integration**
 
 ## Overview
-This repository enable to implement a **CartPole environment** for training reinforcement learning (RL) agents to solve the classic control problem of balancing a pole on a cart while keeping the cart near the origin. The environment trains agents to **swing the pole up from a downward position to an upright position** and maintain the cart at the center
+In this final project, reinforcement learning is used to implement control for **swinging a pole on a cart from a downward position to a vertically upright position** and then maintaining balance while keeping the cart at the center of the track.
+
+Swing-up control requires more advanced control than simple balance maintenance, and since it is a system that cannot be controlled with linear control, reinforcement learning is effective. The Proximal Policy Optimization (PPO) algorithm, which can handle continuous action spaces, is adopted as the policy learning algorithm.
+
+The implementation utilizes the **RSL RL** library and the **Genesis** environment.
 
 ## Objectives
 
@@ -119,7 +123,7 @@ Add a penalty for the cart moving away from x = 0 to keep the cart centered
 
 ## Evaluation Metrics
 #### Cart Position (m)
-![](media/cart_)
+![](media/cart_pos.png)
 #### Cart Velocity (m/s)
 ![](media/cart_vel.png)  
 
@@ -130,7 +134,7 @@ Add a penalty for the cart moving away from x = 0 to keep the cart centered
 ![](media/pole_vel.png)  
 
 #### Control Force (N)
-![](media/actions.png)  
+![](media/action.png)  
 
 ## References
 - Nikita Rudin, David Hoeller, Philipp Reist, and Marco Hutter.  
