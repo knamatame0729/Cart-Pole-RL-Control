@@ -86,7 +86,7 @@ def get_cfgs():
             "upright": 50.0,  # Reward for swinging pole upright
             "upright_stable": 30.0, # Reward for keeping upright
             "action_rate": -0.001,  # Penalty for rapid action changes
-            "cart_pos": -2.0,  # Penalty for cart deviation from origin
+            "cart_pos": -3.0,  # Penalty for cart deviation from origin
         },
     }
     return env_cfg, obs_cfg, reward_cfg

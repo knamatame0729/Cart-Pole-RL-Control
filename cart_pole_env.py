@@ -219,7 +219,7 @@ class CartPoleEnv:
         > 1 - cos(0) = 0
 
         """
-        return (1.0 - torch.cos(self.pole_angle[:, 0])) / 1.0
+        return (1.0 - torch.cos(self.pole_angle[:, 0]))
 
     def _reward_upright_stable(self):
         """
