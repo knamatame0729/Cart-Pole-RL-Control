@@ -8,6 +8,13 @@ Swing-up control requires more advanced control than simple balance maintenance,
 
 The implementation utilizes the **RSL RL** library and the **Genesis** environment.
 
+## Objectives
+
+1. Maintain the pendulum in an upright position (π rad) from downward position (0 rad)
+2. Keep the cart within ± 2.5m physical limits
+3. Keep the cart at origin
+3. Achieve stabele operation
+
 ## Testing Environment
 - AMD Ryzen 7 5700X
 - RTX 3060 Ti
