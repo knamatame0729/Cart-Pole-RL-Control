@@ -123,39 +123,21 @@ Add a penalty for the cart moving away from x = 0 to keep the cart centered
 
 ## Train Detail
 
-#### Reward for Pole Upright Stable
+#### Mean Espisode Length
 
 <div align="center">
 
-![alt text](media/rew_upright_stable.png)
+![alt text](media/mean_episode_length.png)
 
 </div>
 
-#### Reward for Pole Upright
+#### Mean Reward 
 
 <div align="center">
 
-![alt text](media/rew_upright.png)
+![alt text](media/mean_reward.png)
 
 </div>
-
-#### Reaard for Cart Position
-
-<div align="center">
-
-![alt text](media/rew_cart_pos.png)
-
-</div>
-
-#### Reward for Action Rate
-
-<div align="center">
-
-![alt text](media/rew_action_rate.png)
-
-</div>
-
-####
 
 ## Evaluation Metrics
 #### Cart Position (m)
