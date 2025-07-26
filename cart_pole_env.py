@@ -113,7 +113,7 @@ class CartPoleEnv:
         self.pole_vel[:] = self.robot.get_dofs_velocity(self.pole_joint_idx)
 
         # Check termination conditions
-        self.reset_buf = self.episode_length_buf >= self.max_episode_length  # 500 steps
+        self.reset_buf = self.episode_length_buf >= self.max_episode_length  # 1000 steps
         self.reset_buf |= torch.abs(self.cart_pos[:, 0]) > 2.4  # Cart position limit
 
         time_out_idx = (self.episode_length_buf >= self.max_episode_length).nonzero(as_tuple=False).flatten()
