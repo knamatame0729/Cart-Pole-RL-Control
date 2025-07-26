@@ -163,7 +163,7 @@ Add a penalty for the cart moving away from x = 0 to keep the cart centered
 ![](media/pole_vel.png)  
 
 #### Control Force (N)
-![](media/actions.png)  
+![](media/action.png)  
 
 ## References
 - Nikita Rudin, David Hoeller, Philipp Reist, and Marco Hutter.  
