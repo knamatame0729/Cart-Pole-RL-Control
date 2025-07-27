@@ -14,7 +14,7 @@ The implementation utilizes the **RSL RL** library and the **Genesis** environme
 1. Maintain the pendulum in an upright position (π rad) from downward position (0 rad)
 2. Keep the cart within ± 2.5m physical limits
 3. Keep the cart at origin
-3. Achieve stabele operation
+3. Achieve stable operation
 
 ## Testing Environment
 - AMD Ryzen 7 5700X
