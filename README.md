@@ -139,7 +139,7 @@ Add a penalty for the cart moving away from x = 0 to keep the cart centered
 
 </div>
 
-## Evaluation Metrics
+## Performance Metrics
 #### Cart Position (m)
 ![](media/cart_pos.png)
 #### Cart Velocity (m/s)
